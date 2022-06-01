@@ -1,0 +1,23 @@
+# Type: AWS::EC2::VPC
+# Properties: 
+#   CidrBlock: String
+#   EnableDnsHostnames: Boolean
+#   EnableDnsSupport: Boolean
+#   InstanceTenancy: String
+#   Ipv4IpamPoolId: String
+#   Ipv4NetmaskLength: Integer
+#   Tags: 
+#     - Tag
+
+Description: >
+  A simple script to provision a vpc
+
+Resources:
+  customVPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.0.0.0/16
+      EnableDnsHostnames: true
+      Tags:
+        - Key: cloudformation
+          Value: Udacity

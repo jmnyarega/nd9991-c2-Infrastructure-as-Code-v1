@@ -1,0 +1,21 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "Basic S3 Bucket CloudFormation template",
+  "Resources": {
+    "S3BucketCreatedByCloudFormation": {
+      "Type": "AWS::S3::Bucket",
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "AccessControl": "PublicRead"
+      }
+    }
+  },
+  "Outputs": {
+    "BucketName": {
+      "Value": {
+        "Ref": "S3BucketCreatedByCloudFormation"
+      },
+      "Description": "Name of the newly created Amazon S3 Bucket"
+    }
+  }
+}

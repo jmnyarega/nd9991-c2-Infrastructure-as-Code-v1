@@ -1,0 +1,43 @@
+Parameters:
+  VPC:
+    Description: Vpc for these resources
+    Type: AWS::EC2::VPC::Id
+  Subnet:
+    Description: Used for the Web Server
+    Type: AWS::EC2::Subnet::Id
+
+Resources:
+  SG:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      Description: Allow http to test host
+      VPCID:
+        Ref: VPC
+      Igress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+      Egress:
+        - IpProtocol: -1
+          FromPort: -1
+          ToPort: -1
+          CidrIp: 0.0.0.0/0
+  EC2:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: t2.micro
+      ImageId: !Ref AMItoUse
+      NetworkInterfaces:
+        - AssociatePublicIpAddress: true
+          DeviceIndex: 0
+          GroupSet:
+            - Ref: "SG"
+          SubnetId:
+            Ref: "Subnet"
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          yum update -y
+          yum install -y httpd
+          systemctl start http
