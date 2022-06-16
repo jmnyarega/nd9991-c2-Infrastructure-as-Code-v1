@@ -1,7 +1,14 @@
 [
   {
-    "ParameterKey": "EnvironmentName",
-    "ParameterValue": "UdacityProject"
+    "ParameterKey": "VPC",
+    "ParameterValue": "vpc-0a5801856b08c0e66"
+  },
+  {
+    "ParameterKey": "Subnet",
+    "ParameterValue": "subnet-01a182341a80576ee"
+  },
+  {
+    "ParameterKey": "AMI",
+    "ParameterValue": "ami-0022f774911c1d690"
   }
 ]
-

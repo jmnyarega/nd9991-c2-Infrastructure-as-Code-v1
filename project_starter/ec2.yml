@@ -1,43 +1,53 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: A highly scalable web server
+
 Parameters:
   VPC:
-    Description: Vpc for these resources
+    Description: VPC used to deploy our resources below
     Type: AWS::EC2::VPC::Id
+
   Subnet:
-    Description: Used for the Web Server
+    Description: Subnet to be used for our Web Server
     Type: AWS::EC2::Subnet::Id
+
+  AMI:
+    Description: AMI to use for our base image
+    Type: String
 
 Resources:
   SG:
     Type: AWS::EC2::SecurityGroup
     Properties:
-      Description: Allow http to test host
-      VPCID:
+      GroupDescription: Allow http to our test host
+      VpcId:
         Ref: VPC
-      Igress:
-        - IpProtocol: tcp
-          FromPort: 80
-          ToPort: 80
-          CidrIp: 0.0.0.0/0
-      Egress:
-        - IpProtocol: -1
-          FromPort: -1
-          ToPort: -1
-          CidrIp: 0.0.0.0/0
-  EC2:
+      SecurityGroupIngress:
+      - IpProtocol: tcp
+        FromPort: 80
+        ToPort: 80
+        CidrIp: 0.0.0.0/0
+      SecurityGroupEgress:
+      - IpProtocol: -1
+        FromPort: -1
+        ToPort: -1
+        CidrIp: 0.0.0.0/0
+  myWebServerInstance: 
     Type: AWS::EC2::Instance
     Properties:
       InstanceType: t2.micro
-      ImageId: !Ref AMItoUse
-      NetworkInterfaces:
-        - AssociatePublicIpAddress: true
-          DeviceIndex: 0
-          GroupSet:
+      ImageId: !Ref AMI
+      NetworkInterfaces: 
+        - AssociatePublicIpAddress: "true"
+          DeviceIndex: "0"
+          GroupSet: 
             - Ref: "SG"
-          SubnetId:
+          SubnetId: 
             Ref: "Subnet"
       UserData:
         Fn::Base64: !Sub |
           #!/bin/bash
           yum update -y
           yum install -y httpd
-          systemctl start http
+          systemctl start httpd 
+          echo "hello world" > index.html
+          nohup busybox httpd -f -p 8080 &
